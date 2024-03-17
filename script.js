@@ -126,6 +126,7 @@ function startGame() {
     speedInput.disabled = true;
     columnsInput.disabled = true;
     rowsInput.disabled = true;
+    stopButton.disabled = false;
 }
 
 // Function to stop the game
@@ -135,7 +136,15 @@ function stopGame() {
     speedInput.disabled = false;
     columnsInput.disabled = false;
     rowsInput.disabled = false;
+    stopButton.disabled = true;
 }
+
+function resetGame() {
+    stopGame();
+    generateGrid();
+}
+
+stopButton.disabled = true;
 
 // Event listener for start button click
 startButton.addEventListener('click', startGame);
@@ -157,7 +166,7 @@ speedInput.addEventListener('change', () => {
     speed = parseInt(speedInput.value);
 })
 
-resetButton.addEventListener('click', generateGrid);
+resetButton.addEventListener('click', resetGame);
 
 let isMouseDown = false; // Flag to track if the mouse is pressed
 
