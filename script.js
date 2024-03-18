@@ -21,12 +21,13 @@ function generateGrid() {
     for (let i = 0; i < rows; i++) {
         html += '<tr>';
         for (let j = 0; j < columns; j++) {
-            html += '<td class="" onclick="changeState(this)"></td>';
+            html += '<td class="" onclick="changeState(this)"><div class="inside"></div></td>';
         }
         html += '</tr>';
     }
     gameGrid.innerHTML = html;
     grid = Array.from(gameGrid.getElementsByTagName('td'));
+    adjustCellHeight();
 }
 
 function changeState(elem) {
@@ -139,6 +140,12 @@ function stopGame() {
     stopButton.disabled = true;
 }
 
+function overTD(elem) {
+    if (isMouseDown) {
+        changeState(elem);
+    }
+}
+
 function resetGame() {
     stopGame();
     generateGrid();
@@ -182,14 +189,32 @@ document.addEventListener('mouseup', function(event) {
   isMouseDown = false;
 });
 
-document.addEventListener('mouseover', function(event) {
+
+
+document.addEventListener('mouseout', function(event) {
   // Check if the mouse is over a td element and the left mouse button is pressed
   if (event.target.tagName === 'TD' && isMouseDown) {
-    changeState(event.target);
+    event.target.className = 'alive';
   }
 });
 
-  
+function adjustCellHeight() {
+    const columnWidth = `calc(100vw / ${columns})`;
+    const width = 100 / columns * window.innerWidth;
+    const rowHeight = `calc(88vh / ${rows})`;
+    const height = 88 / rows * window.innerHeight;
+
+    if (height > width) {
+        grid.forEach(cell => {
+            cell.style.width = columnWidth;
+        });
+    } else {
+        grid.forEach(cell => {
+            cell.style.height = rowHeight;
+        });
+    }
+    
+} 
 
 // Generate the initial game grid
 generateGrid();
